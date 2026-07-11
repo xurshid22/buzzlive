@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuzzLive — Live Streaming Platform</title>
+<style>
+:root {
+  --red:#ff3b5c; --red2:#ff0040; --purple:#7c3aed; --purple2:#a855f7;
+  --bg:#0a0a0a; --bg2:#111; --bg3:#161616; --card:#1a1a1a;
+  --border:#222; --text:#f5f5f5; --muted:#666; --muted2:#444;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden;}
+
+/* TOPBAR */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:rgba(10,10,10,0.95);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;height:58px;
+}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-dot{
+  width:32px;height:32px;border-radius:10px;
+  background:linear-gradient(135deg,var(--red),var(--purple));
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+}
+.logo-text{font-size:20px;font-weight:900;letter-spacing:-0.5px;}
+.logo-text span{
+  background:linear-gradient(135deg,var(--red),var(--purple2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.header-center{display:flex;gap:6px;}
+.h-tab{
+  padding:7px 18px;border-radius:20px;font-size:14px;font-weight:600;
+  color:var(--muted);cursor:pointer;transition:.2s;border:none;background:none;
+}
+.h-tab:hover,.h-tab.active{color:#fff;background:var(--card);}
+.header-r{display:flex;align-items:center;gap:10px;}
+.search-box{
+  display:flex;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:7px 16px;
+}
+.search-box input{
+  background:none;border:none;outline:none;color:#fff;font-size:14px;width:160px;
+}
+.search-box input::placeholder{color:var(--muted);}
+.btn-signin{
+  padding:8px 20px;border-radius:20px;font-size:14px;font-weight:700;
+  background:none;border:1px solid var(--border);color:#fff;cursor:pointer;transition:.2s;
+}
+.btn-signin:hover{border-color:#555;}
+.btn-live{
+  padding:8px 20px;border-radius:20px;font-size:14px;font-weight:800;
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  border:none;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px;
+  box-shadow:0 4px 20px rgba(255,59,92,0.3);transition:.2s;
+}
+.btn-live:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(255,59,92,0.4);}
+
+/* HERO */
+.hero{
+  padding:100px 24px 60px;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(255,59,92,0.12) 0%,transparent 60%);
+  pointer-events:none;
+}
+.live-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,59,92,0.1);border:1px solid rgba(255,59,92,0.25);
+  color:var(--red);font-size:13px;font-weight:700;
+  padding:6px 18px;border-radius:20px;margin-bottom:28px;
+}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse 1.2s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.3);}}
+.hero h1{
+  font-size:clamp(40px,9vw,80px);font-weight:900;
+  line-height:1.0;letter-spacing:-3px;margin-bottom:20px;
+}
+.hero h1 .gr{
+  background:linear-gradient(135deg,var(--red),var(--purple2),#60a5fa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-sub{font-size:18px;color:var(--muted);max-width:520px;margin:0 auto 36px;line-height:1.7;}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-start{
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  color:#fff;font-weight:800;font-size:16px;
+  padding:15px 36px;border-radius:14px;border:none;cursor:pointer;
+  box-shadow:0 8px 32px rgba(255,59,92,0.35);transition:.2s;
+  display:flex;align-items:center;gap:8px;
+}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,59,92,0.45);}
+.btn-ghost{
+  background:var(--card);border:1px solid var(--border);
+  color:#fff;font-weight:600;font-size:16px;
+  padding:15px 36px;border-radius:14px;cursor:pointer;transition:.2s;
+}
+.btn-ghost:hover{border-color:#444;background:#222;}
+.hero-nums{display:flex;gap:48px;margin-top:56px;flex-wrap:wrap;justify-content:center;}
+.h-num{text-align:center;}
+.h-num-val{font-size:34px;font-weight:900;}
+.h-num-val.red{color:var(--red);}
+.h-num-val.pu{color:var(--purple2);}
+.h-num-val.bl{color:#60a5fa;}
+.h-num-lab{font-size:13px;color:var(--muted);margin-top:2px;}
+
+/* MAIN CONTENT */
+main{max-width:1280px;margin:0 auto;padding:0 24px;}
+
+/* SECTION HEADER */
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.sec-title{font-size:20px;font-weight:800;}
+.sec-more{font-size:14px;color:var(--muted);cursor:pointer;transition:.2s;}
+.sec-more:hover{color:#fff;}
+
+/* LIVE GRID */
+.live-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:16px;margin-bottom:48px;
+}
+.live-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;cursor:pointer;transition:.2s;
+}
+.live-card:hover{transform:translateY(-3px);border-color:#333;}
+.live-thumb{
+  position:relative;aspect-ratio:16/9;overflow:hidden;
+  background:var(--bg3);
+}
+.live-thumb-bg{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:40px;
+}
+.live-badge{
+  position:absolute;top:10px;left:10px;
+  background:var(--red);color:#fff;
+  font-size:11px;font-weight:800;padding:3px 10px;
+  border-radius:6px;letter-spacing:1px;
+  display:flex;align-items:center;gap:5px;
+}
+.live-viewers{
+  position:absolute;top:10px;right:10px;
+  background:rgba(0,0,0,0.7);color:#fff;
+  font-size:12px;font-weight:600;padding:3px 10px;
+  border-radius:6px;display:flex;align-items:center;gap:5px;
+}
+.live-card-body{padding:14px;}
+.live-card-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.av{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;border:2px solid var(--red);
+}
+.live-card-info h4{font-size:14px;font-weight:700;margin-bottom:2px;line-height:1.3;}
+.live-card-info span{font-size:12px;color:var(--muted);}
+.live-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.tag{
+  font-size:11px;padding:3px 10px;border-radius:6px;font-weight:600;
+  background:rgba(255,255,255,0.06);color:var(--muted);
+}
+
+/* FEATURED */
+.featured{
+  background:linear-gradient(135deg,rgba(255,59,92,0.08),rgba(124,58,237,0.08));
+  border:1px solid rgba(255,59,92,0.15);
+  border-radius:20px;padding:28px;margin-bottom:48px;
+  display:flex;gap:24px;align-items:center;flex-wrap:wrap;
+}
+.feat-thumb{
+  flex:0 0 auto;width:320px;aspect-ratio:16/9;
+  background:var(--bg3);border-radius:14px;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  font-size:64px;position:relative;
+}
+.feat-info{flex:1;min-width:200px;}
+.feat-live{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,59,92,0.15);color:var(--red);
+  font-size:12px;font-weight:800;padding:4px 14px;
+  border-radius:20px;margin-bottom:14px;letter-spacing:1px;
+}
+.feat-info h2{font-size:24px;font-weight:900;margin-bottom:8px;line-height:1.2;}
+.feat-info p{font-size:14px;color:var(--muted);margin-bottom:16px;line-height:1.6;}
+.feat-meta{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+.meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);}
+.btn-watch{
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  color:#fff;font-weight:800;font-size:14px;
+  padding:11px 28px;border-radius:12px;border:none;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;transition:.2s;
+}
+.btn-watch:hover{opacity:.9;}
+
+/* CATEGORIES */
+.cats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px;}
+.cat{
+  padding:8px 20px;border-radius:20px;font-size:14px;font-weight:600;
+  border:1px solid var(--border);background:var(--card);color:var(--muted);
+  cursor:pointer;transition:.2s;display:flex;align-items:center;gap:6px;
+}
+.cat:hover,.cat.active{border-color:rgba(255,59,92,0.4);color:var(--red);background:rgba(255,59,92,0.06);}
+
+/* PROFILE PREVIEW */
+.profile-section{
+  background:var(--bg2);border-top:1px solid var(--border);
+  padding:60px 24px;margin-top:40px;
+}
+.profile-inner{max-width:1280px;margin:0 auto;}
+.profile-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;max-width:480px;
+}
+.profile-cover{
+  height:120px;
+  background:linear-gradient(135deg,rgba(255,59,92,0.4),rgba(124,58,237,0.4));
+  position:relative;
+}
+.profile-av{
+  position:absolute;bottom:-28px;left:24px;
+  width:64px;height:64px;border-radius:50%;
+  background:var(--bg3);border:3px solid var(--card);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;
+}
+.profile-body{padding:40px 24px 24px;}
+.profile-name{font-size:20px;font-weight:800;margin-bottom:2px;}
+.profile-handle{font-size:14px;color:var(--muted);margin-bottom:14px;}
+.profile-stats{display:flex;gap:24px;margin-bottom:16px;}
+.ps{text-align:center;}
+.ps-n{font-size:18px;font-weight:800;}
+.ps-l{font-size:12px;color:var(--muted);}
+.follow-btn{
+  width:100%;padding:11px;border-radius:12px;
+  background:linear-gradient(135deg,var(--red),var(--purple));
+  border:none;color:#fff;font-weight:800;font-size:14px;cursor:pointer;
+}
+
+/* FEATURES GRID */
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:40px;}
+.feat-item{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:18px;padding:24px;transition:.2s;
+}
+.feat-item:hover{border-color:#333;transform:translateY(-2px);}
+.fi-icon{font-size:32px;margin-bottom:14px;}
+.fi-title{font-size:16px;font-weight:700;margin-bottom:8px;}
+.fi-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* LIVE ROOM PREVIEW */
+.room-preview{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;margin-bottom:48px;
+}
+.room-top{
+  background:var(--bg3);padding:12px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+.room-title{font-size:15px;font-weight:700;}
+.room-body{display:flex;min-height:360px;}
+.room-video{
+  flex:1;background:#000;
+  display:flex;align-items:center;justify-content:center;
+  font-size:80px;position:relative;
+}
+.room-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 40%);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:20px;
+}
+.room-streamer{display:flex;align-items:center;gap:10px;}
+.room-av{width:36px;height:36px;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.room-name{font-size:14px;font-weight:700;}
+.room-viewers-bar{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);}
+.room-chat{
+  width:280px;border-left:1px solid var(--border);
+  display:flex;flex-direction:column;
+}
+.chat-messages{
+  flex:1;padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;
+}
+.chat-msg{font-size:13px;line-height:1.4;}
+.chat-msg .cm-name{font-weight:700;margin-right:6px;}
+.chat-msg .cm-text{color:#ccc;}
+.chat-input-row{
+  padding:12px;border-top:1px solid var(--border);
+  display:flex;gap:8px;
+}
+.chat-inp{
+  flex:1;background:var(--card);border:1px solid var(--border);
+  color:#fff;font-size:13px;padding:9px 14px;border-radius:10px;outline:none;
+}
+.chat-send{
+  background:var(--red);border:none;color:#fff;
+  padding:9px 16px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;
+}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--border);padding:32px 24px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;
+}
+.footer-logo{font-size:18px;font-weight:900;}
+.footer-logo span{background:linear-gradient(135deg,var(--red),var(--purple2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.footer-links{display:flex;gap:20px;}
+.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:.2s;}
+.footer-links a:hover{color:#fff;}
+.footer-copy{font-size:12px;color:var(--muted2);}
+
+/* PAGE SWITCH */
+.page{display:none;}
+.page.active{display:block;}
+
+/* REGISTER MODAL */
+.modal-bg{
+  display:none;position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;
+}
+.modal-bg.show{display:flex;}
+.modal{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:24px;padding:36px;width:100%;max-width:400px;
+  position:relative;
+}
+.modal-close{
+  position:absolute;top:16px;right:16px;
+  background:var(--card);border:none;color:var(--muted);
+  width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;
+}
+.modal h2{font-size:24px;font-weight:900;margin-bottom:6px;}
+.modal p{font-size:14px;color:var(--muted);margin-bottom:24px;}
+.m-inp{
+  width:100%;background:var(--card);border:1px solid var(--border);
+  color:#fff;font-size:15px;padding:13px 16px;border-radius:12px;
+  outline:none;margin-bottom:12px;transition:.2s;
+}
+.m-inp:focus{border-color:rgba(255,59,92,0.5);}
+.m-btn{
+  width:100%;padding:14px;border-radius:12px;
+  background:linear-gradient(135deg,var(--red),var(--purple));
+  border:none;color:#fff;font-weight:800;font-size:15px;cursor:pointer;
+  margin-bottom:12px;transition:.2s;
+}
+.m-btn:hover{opacity:.9;}
+.m-switch{text-align:center;font-size:13px;color:var(--muted);}
+.m-switch a{color:var(--red);cursor:pointer;font-weight:600;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeIn .5s ease both;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-dot">🔴</div>
+    <div class="logo-text">Buzz<span>Live</span></div>
+  </div>
+  <div class="header-center">
+    <button class="h-tab active" onclick="switchTab(this,'home')">Efirlar</button>
+    <button class="h-tab" onclick="switchTab(this,'categories')">Kategoriyalar</button>
+    <button class="h-tab" onclick="switchTab(this,'profile')">Profil</button>
+  </div>
+  <div class="header-r">
+    <div class="search-box">
+      <span style="color:var(--muted)">🔍</span>
+      <input type="text" placeholder="Qidirish...">
+    </div>
+    <button class="btn-signin" onclick="showModal('login')">Kirish</button>
+    <button class="btn-live" onclick="showModal('register')">
+      <div class="live-dot"></div> LIVE boshlash
+    </button>
+  </div>
+</header>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="live-pill"><div class="live-dot"></div> 12,847 nafar hozir efirda</div>
+    <h1>Faqat <span class="gr">JONLI EFIR</span><br>platformasi</h1>
+    <p class="hero-sub">Post yo'q. Reels yo'q. Faqat haqiqiy, jonli efirlar. O'rganish, o'rgatish, muloqot qilish — barchasi real vaqtda.</p>
+    <div class="hero-btns">
+      <button class="btn-start" onclick="showModal('register')"><div class="live-dot"></div> LIVE boshlash</button>
+      <button class="btn-ghost" onclick="scrollTo(0,600)">Efirlarni ko'rish ↓</button>
+    </div>
+    <div class="hero-nums">
+      <div class="h-num"><div class="h-num-val red">48K+</div><div class="h-num-lab">Foydalanuvchi</div></div>
+      <div class="h-num"><div class="h-num-val pu">1.2K</div><div class="h-num-lab">Hozirgi efirlar</div></div>
+      <div class="h-num"><div class="h-num-val bl">98%</div><div class="h-num-lab">Xavfsiz muhit</div></div>
+    </div>
+  </div>
+
+  <main>
+    <!-- FEATURED LIVE -->
+    <div class="sec-header"><div class="sec-title">🔥 Tanlangan efir</div></div>
+    <div class="featured">
+      <div class="feat-thumb">🎸
+        <div style="position:absolute;bottom:10px;left:10px">
+          <div class="live-badge"><div class="live-dot"></div> JONLI</div>
+        </div>
+      </div>
+      <div class="feat-info">
+        <div class="feat-live"><div class="live-dot"></div> JONLI EFIR</div>
+        <h2>Gitara darsi — Boshlang'ichlar uchun 🎸</h2>
+        <p>Bugun birgalikda birinchi akkorni o'rganamiz. Hech qanday tajriba shart emas!</p>
+        <div class="feat-meta">
+          <div class="meta-item">👁 3,241 tomosha</div>
+          <div class="meta-item">❤️ 8,912 like</div>
+          <div class="meta-item">⏱ 1s 23d dan beri</div>
+        </div>
+        <button class="btn-watch" onclick="openRoom()">▶ Efirni ko'rish</button>
+      </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="cats">
+      <div class="cat active">🔴 Barchasi</div>
+      <div class="cat">📚 Ta'lim</div>
+      <div class="cat">🎵 Musiqa</div>
+      <div class="cat">🎮 O'yinlar</div>
+      <div class="cat">💻 Dasturlash</div>
+      <div class="cat">🎨 San'at</div>
+      <div class="cat">💪 Sport</div>
+      <div class="cat">🍳 Oshpazlik</div>
+    </div>
+
+    <!-- LIVE GRID -->
+    <div class="sec-header">
+      <div class="sec-title">📡 Jonli efirlar</div>
+      <div class="sec-more">Hammasini ko'rish →</div>
+    </div>
+    <div class="live-grid">
+      <div class="live-card" onclick="openRoom()">
+        <div class="live-thumb">
+          <div class="live-thumb-bg" style="background:linear-gradient(135deg,#1a0a2e,#2d1b69)">📐</div>
+          <div class="live-badge"><div class="live-dot"></div> JONLI</div>
+          <div class="live-viewers">👁 1,847</div>
+        </div>
+        <div class="live-card-body">
+          <div class="live-card-top">
+            <div class="av" style="background:#1a0a2e">👩</div>
+            <div class="live-card-info"><h4>Matematika — 9-sinf imtihon tayyorgarlik</h4><span>@malika_teacher</span></div>
+          </div>
+          <div class="live-tags"><div class="tag">📚 Ta'lim</div><div class="tag">Matematika</div></div>
+        </div>
+      </div>
+      <div class="live-card" onclick="openRoom()">
+        <div class="live-thumb">
+          <div class="live-thumb-bg" style="background:linear-gradient(135deg,#0a1a0a,#0d2d0d)">💻</div>
+          <div class="live-badge"><div class="live-dot"></div> JONLI</div>
+          <div class="live-viewers">👁 924</div>
+        </div>
+        <div class="live-card-body">
+          <div class="live-card-top">
+            <div class="av" style="background:#0a1a0a">👨</div>
+            <div class="live-card-info"><h4>Python dasturlash — 0 dan boshlab</h4><span>@code_uzb</span></div>
+          </div>
+          <div class="live-tags"><div class="tag">💻 Dasturlash</div><div class="tag">Python</div></div>
+        </div>
+      </div>
+      <div class="live-card" onclick="openRoom()">
+        <div class="live-thumb">
+          <div class="live-thumb-bg" style="background:linear-gradient(135deg,#1a0a0a,#2d0d0d)">🎵</div>
+          <div class="live-badge"><div class="live-dot"></div> JONLI</div>
+          <div class="live-viewers">👁 2,103</div>
+        </div>
+        <div class="live-card-body">
+          <div class="live-card-top">
+            <div class="av" style="background:#1a0a0a">🎤</div>
+            <div class="live-card-info"><h4>Acoustik konsert — yozgi kechki efir</h4><span>@asilbek_music</span></div>
+          </div>
+          <div class="live-tags"><div class="tag">🎵 Musiqa</div><div class="tag">Konsert</div></div>
+        </div>
+      </div>
+      <div class="live-card" onclick="openRoom()">
+        <div class="live-thumb">
+          <div class="live-thumb-bg" style="background:linear-gradient(135deg,#0a0a1a,#0d0d2d)">🎨</div>
+          <div class="live-badge"><div class="live-dot"></div> JONLI</div>
+          <div class="live-viewers">👁 567</div>
+        </div>
+        <div class="live-card-body">
+          <div class="live-card-top">
+            <div class="av" style="background:#0a0a1a">🎭</div>
+            <div class="live-card-info"><h4>Digital art — Procreate live session</h4><span>@art_by_nilufar</span></div>
+          </div>
+          <div class="live-tags"><div class="tag">🎨 San'at</div><div class="tag">Digital</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROOM PREVIEW -->
+    <div class="sec-header" id="room-sec" style="display:none">
+      <div class="sec-title">▶ Efir xonasi</div>
+      <div class="sec-more" onclick="closeRoom()">✕ Yopish</div>
+    </div>
+    <div class="room-preview" id="liveRoom" style="display:none">
+      <div class="room-top">
+        <div class="room-title">🔴 Gitara darsi — Boshlang'ichlar uchun</div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <span style="font-size:13px;color:var(--muted)">👁 3,241</span>
+          <button style="background:var(--red);border:none;color:#fff;padding:6px 14px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">❤️ Like</button>
+        </div>
+      </div>
+      <div class="room-body">
+        <div class="room-video">
+          🎸
+          <div class="room-overlay">
+            <div class="room-streamer">
+              <div class="room-av">👨</div>
+              <div>
+                <div class="room-name">@guitar_master_uz</div>
+                <div class="room-viewers-bar"><div class="live-dot"></div> 3,241 tomosha</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="room-chat">
+          <div class="chat-messages" id="chatMsgs">
+            <div class="chat-msg"><span class="cm-name" style="color:#f87171">Aziz:</span><span class="cm-text">Super dars! 🎸</span></div>
+            <div class="chat-msg"><span class="cm-name" style="color:#60a5fa">Malika:</span><span class="cm-text">Rahmat ustoz! ❤️</span></div>
+            <div class="chat-msg"><span class="cm-name" style="color:#4ade80">Sardor:</span><span class="cm-text">Men ham o'rganmoqchiman</span></div>
+            <div class="chat-msg"><span class="cm-name" style="color:#fbbf24">Nodira:</span><span class="cm-text">Qachon keyingi dars? 🙏</span></div>
+            <div class="chat-msg"><span class="cm-name" style="color:#a78bfa">Jasur:</span><span class="cm-text">🔥🔥🔥</span></div>
+          </div>
+          <div class="chat-input-row">
+            <input class="chat-inp" id="chatInp" placeholder="Xabar yozing..." onkeydown="if(event.key==='Enter')sendChat()">
+            <button class="chat-send" onclick="sendChat()">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="sec-header" style="margin-top:20px"><div class="sec-title">⚡ Nima ajratib turadi?</div></div>
+    <div class="feats" style="margin-bottom:48px">
+      <div class="feat-item">
+        <div class="fi-icon">🔴</div>
+        <div class="fi-title">Faqat jonli efir</div>
+        <div class="fi-desc">Post, story, reel yo'q. Faqat real vaqtdagi jonli efirlar. Haqiqiy, filtersiz muloqot.</div>
+      </div>
+      <div class="feat-item">
+        <div class="fi-icon">👤</div>
+        <div class="fi-title">Shaxsiy profil</div>
+        <div class="fi-desc">O'z profilingiz, followerlar, o'tgan efirlar tarixi va statistika.</div>
+      </div>
+      <div class="feat-item">
+        <div class="fi-icon">🛡</div>
+        <div class="fi-title">Xavfsiz muhit</div>
+        <div class="fi-desc">AI moderatsiya. Zararli kontent avtomatik bloklash. Yosh cheklovi tizimi.</div>
+      </div>
+      <div class="feat-item">
+        <div class="fi-icon">📱</div>
+        <div class="fi-title">Telefon orqali live</div>
+        <div class="fi-desc">Ilova o'rnatmasdan to'g'ridan-to'g'ri brauzer orqali efir boshlash.</div>
+      </div>
+      <div class="feat-item">
+        <div class="fi-icon">💬</div>
+        <div class="fi-title">Real-time chat</div>
+        <div class="fi-desc">Efir paytida jonli chat, reactions va savol-javob rejimi.</div>
+      </div>
+      <div class="feat-item">
+        <div class="fi-icon">🏫</div>
+        <div class="fi-title">Maktab guruhlar</div>
+        <div class="fi-desc">Sinf va maktab bo'yicha yopiq efir xonalari. Faqat o'z sinfdoshlaring.</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- PROFILE PAGE -->
+<div class="page" id="page-profile">
+  <div class="profile-section" style="min-height:100vh;padding-top:80px;">
+    <div class="profile-inner">
+      <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start">
+        <div class="profile-card fade-in">
+          <div class="profile-cover"></div>
+          <div class="profile-av">👤</div>
+          <div class="profile-body">
+            <div class="profile-name">Xurshidbek H.</div>
+            <div class="profile-handle">@xurshid_live · O'zbekiston</div>
+            <div class="profile-stats">
+              <div class="ps"><div class="ps-n">1.2K</div><div class="ps-l">Followers</div></div>
+              <div class="ps"><div class="ps-n">48</div><div class="ps-l">Following</div></div>
+              <div class="ps"><div class="ps-n">24</div><div class="ps-l">Efirlar</div></div>
+            </div>
+            <button class="follow-btn" onclick="showModal('register')">🔴 LIVE boshlash</button>
+          </div>
+        </div>
+        <div style="flex:1;min-width:260px;">
+          <h2 style="font-size:22px;font-weight:900;margin-bottom:20px">O'tgan efirlar</h2>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;gap:14px;align-items:center">
+              <div style="font-size:32px">🎸</div>
+              <div><div style="font-weight:700;margin-bottom:4px">Gitara darsi #3</div><div style="font-size:13px;color:var(--muted)">2 kun oldin · 1,200 tomosha · 45 daqiqa</div></div>
+            </div>
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;gap:14px;align-items:center">
+              <div style="font-size:32px">💻</div>
+              <div><div style="font-weight:700;margin-bottom:4px">Python loyiha ko'rgazmasi</div><div style="font-size:13px;color:var(--muted)">5 kun oldin · 847 tomosha · 1 soat 12 daqiqa</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-login">
+      <h2>Kirish 👋</h2>
+      <p>BuzzLive'ga xush kelibsiz</p>
+      <input class="m-inp" type="email" placeholder="Email manzil">
+      <input class="m-inp" type="password" placeholder="Parol">
+      <button class="m-btn" onclick="closeModal()">Kirish</button>
+      <div class="m-switch">Akkaunt yo'qmi? <a onclick="switchModal('register')">Ro'yxatdan o'tish</a></div>
+    </div>
+    <div id="modal-register" style="display:none">
+      <h2>Ro'yxat 🔴</h2>
+      <p>Bepul akkount yarating va efir boshlang</p>
+      <input class="m-inp" type="text" placeholder="To'liq ism">
+      <input class="m-inp" type="text" placeholder="Foydalanuvchi nomi (@username)">
+      <input class="m-inp" type="email" placeholder="Email manzil">
+      <input class="m-inp" type="password" placeholder="Parol">
+      <button class="m-btn" onclick="closeModal()">Akkaunt yaratish →</button>
+      <div class="m-switch">Allaqachon akkount bormi? <a onclick="switchModal('login')">Kirish</a></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">Buzz<span>Live</span></div>
+  <div class="footer-links">
+    <a href="#">Haqida</a>
+    <a href="#">Xavfsizlik</a>
+    <a href="#">Shartlar</a>
+    <a href="https://t.me/ZeroRisk0" target="_blank">Aloqa</a>
+  </div>
+  <div class="footer-copy">© 2026 BuzzLive</div>
+</footer>
+
+<script>
+function switchTab(el, tab) {
+  document.querySelectorAll('.h-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + tab)?.classList.add('active');
+  if(!document.getElementById('page-' + tab)) {
+    document.getElementById('page-home').classList.add('active');
+  }
+}
+function showModal(type) {
+  document.getElementById('modal').classList.add('show');
+  document.getElementById('modal-login').style.display = type==='login' ? 'block' : 'none';
+  document.getElementById('modal-register').style.display = type==='register' ? 'block' : 'none';
+}
+function closeModal() { document.getElementById('modal').classList.remove('show'); }
+function switchModal(type) {
+  document.getElementById('modal-login').style.display = type==='login' ? 'block' : 'none';
+  document.getElementById('modal-register').style.display = type==='register' ? 'block' : 'none';
+}
+function openRoom() {
+  document.getElementById('liveRoom').style.display = 'block';
+  document.getElementById('room-sec').style.display = 'flex';
+  document.getElementById('liveRoom').scrollIntoView({behavior:'smooth',block:'start'});
+  startFakeChat();
+}
+function closeRoom() {
+  document.getElementById('liveRoom').style.display = 'none';
+  document.getElementById('room-sec').style.display = 'none';
+}
+const fakeNames = ['Aziz','Malika','Sardor','Nodira','Jasur','Dilnoza','Bobur','Kamola','Sherzod','Feruza'];
+const fakeMsgs = ['🔥🔥','Super!','Rahmat ustoz!','❤️','Zo\'r!','Ajoyib!','👏👏','Yana bir marta? 🙏','Tushundim!','Buni yaxshi tushuntirdingiz!'];
+const colors = ['#f87171','#60a5fa','#4ade80','#fbbf24','#a78bfa','#fb923c','#38bdf8','#f472b6'];
+let chatInterval;
+function startFakeChat() {
+  if(chatInterval) clearInterval(chatInterval);
+  chatInterval = setInterval(() => {
+    const msgs = document.getElementById('chatMsgs');
+    const n = fakeNames[Math.floor(Math.random()*fakeNames.length)];
+    const m = fakeMsgs[Math.floor(Math.random()*fakeMsgs.length)];
+    const c = colors[Math.floor(Math.random()*colors.length)];
+    const div = document.createElement('div');
+    div.className = 'chat-msg';
+    div.innerHTML = `<span class="cm-name" style="color:${c}">${n}:</span><span class="cm-text">${m}</span>`;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    if(msgs.children.length > 30) msgs.removeChild(msgs.firstChild);
+  }, 1200);
+}
+function sendChat() {
+  const inp = document.getElementById('chatInp');
+  const text = inp.value.trim();
+  if(!text) return;
+  const msgs = document.getElementById('chatMsgs');
+  const div = document.createElement('div');
+  div.className = 'chat-msg';
+  div.innerHTML = `<span class="cm-name" style="color:#ffd93d">Siz:</span><span class="cm-text">${text}</span>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  inp.value = '';
+}
+document.querySelectorAll('.cat').forEach(c => {
+  c.onclick = () => { document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active')); c.classList.add('active'); }
+});
+</script>
+</body>
+</html>
