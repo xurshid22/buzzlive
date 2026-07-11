@@ -3,410 +3,700 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BuzzLive — Live Streaming Platform</title>
+<title>BuzzLive</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 :root {
-  --red:#ff3b5c; --red2:#ff0040; --purple:#7c3aed; --purple2:#a855f7;
-  --bg:#0a0a0a; --bg2:#111; --bg3:#161616; --card:#1a1a1a;
-  --border:#222; --text:#f5f5f5; --muted:#666; --muted2:#444;
+  --bg: #05050a;
+  --bg1: #0a0a12;
+  --bg2: #0f0f1a;
+  --bg3: #141420;
+  --surface: #1a1a28;
+  --surface2: #1f1f30;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --red: #ff2d55;
+  --red-glow: rgba(255,45,85,0.25);
+  --accent: #6c63ff;
+  --accent2: #9d97ff;
+  --green: #30d158;
+  --text: #f0f0f8;
+  --text2: #8888aa;
+  --text3: #55556a;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden;}
 
-/* HEADER */
-header{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  background:rgba(10,10,10,0.97);backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;height:58px;
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
-.logo-dot{
-  width:32px;height:32px;border-radius:10px;
-  background:linear-gradient(135deg,var(--red),var(--purple));
-  display:flex;align-items:center;justify-content:center;font-size:16px;
-}
-.logo-text{font-size:20px;font-weight:900;letter-spacing:-0.5px;color:#fff;}
-.logo-text span{
-  background:linear-gradient(135deg,var(--red),var(--purple2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.header-center{display:flex;gap:6px;}
-.h-tab{
-  padding:7px 18px;border-radius:20px;font-size:14px;font-weight:600;
-  color:var(--muted);cursor:pointer;transition:.2s;border:none;background:none;color:var(--muted);
-}
-.h-tab:hover,.h-tab.active{color:#fff;background:var(--card);}
-.header-r{display:flex;align-items:center;gap:10px;}
-.search-box{
-  display:flex;align-items:center;gap:8px;
-  background:var(--card);border:1px solid var(--border);
-  border-radius:20px;padding:7px 16px;
-}
-.search-box input{background:none;border:none;outline:none;color:#fff;font-size:14px;width:160px;}
-.search-box input::placeholder{color:var(--muted);}
-.btn-signin{
-  padding:8px 20px;border-radius:20px;font-size:14px;font-weight:700;
-  background:none;border:1px solid var(--border);color:#fff;cursor:pointer;transition:.2s;
-}
-.btn-signin:hover{border-color:#555;}
-.btn-golive{
-  padding:8px 20px;border-radius:20px;font-size:14px;font-weight:800;
-  background:linear-gradient(135deg,var(--red),var(--red2));
-  border:none;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px;
-  box-shadow:0 4px 20px rgba(255,59,92,0.3);transition:.2s;
-}
-.btn-golive:hover{transform:translateY(-1px);}
-.live-dot{width:8px;height:8px;border-radius:50%;background:#fff;animation:blink 1.2s ease infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* HERO */
-.hero{
-  min-height:100vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;padding:90px 24px 60px;position:relative;overflow:hidden;
+/* ═══════════════ NAVBAR ═══════════════ */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+  height: 56px;
+  background: rgba(5,5,10,0.8);
+  backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 20px; gap: 12px;
 }
-.hero::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 30%,rgba(255,59,92,0.1) 0%,transparent 65%);
-  pointer-events:none;
+.nav-logo {
+  display: flex; align-items: center; gap: 8px;
+  margin-right: auto; cursor: pointer;
 }
-.hero-content{position:relative;z-index:1;}
-.hero h1{
-  font-size:clamp(42px,9vw,82px);font-weight:900;
-  line-height:1.0;letter-spacing:-3px;margin-bottom:22px;
+.nav-logo-mark {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--red);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
 }
-.gr{
-  background:linear-gradient(135deg,var(--red),var(--purple2),#60a5fa);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+.nav-logo-mark::before {
+  content: '';
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(255,255,255,0.8);
 }
-.hero-sub{font-size:18px;color:var(--muted);max-width:500px;margin:0 auto 40px;line-height:1.7;}
-.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
-.btn-start{
-  background:linear-gradient(135deg,var(--red),var(--red2));
-  color:#fff;font-weight:800;font-size:16px;
-  padding:15px 36px;border-radius:14px;border:none;cursor:pointer;
-  box-shadow:0 8px 32px rgba(255,59,92,0.35);transition:.2s;
-  display:flex;align-items:center;gap:8px;
+.nav-logo-text {
+  font-size: 18px; font-weight: 800; letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #fff 30%, var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
-.btn-start:hover{transform:translateY(-2px);}
-.btn-ghost{
-  background:var(--card);border:1px solid var(--border);
-  color:#fff;font-weight:600;font-size:16px;
-  padding:15px 36px;border-radius:14px;cursor:pointer;transition:.2s;
+.nav-tabs { display: flex; gap: 2px; }
+.nav-tab {
+  padding: 6px 14px; border-radius: 8px;
+  font-size: 13px; font-weight: 600; color: var(--text3);
+  cursor: pointer; transition: all .2s; border: none; background: none;
 }
-.btn-ghost:hover{background:#222;}
+.nav-tab:hover { color: var(--text2); background: rgba(255,255,255,0.04); }
+.nav-tab.on { color: var(--text); background: var(--surface); }
+.nav-search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 6px 14px; margin-left: 8px;
+}
+.nav-search input {
+  background: none; border: none; outline: none;
+  color: var(--text); font-size: 13px; width: 140px; font-family: inherit;
+}
+.nav-search input::placeholder { color: var(--text3); }
+.nav-btn-ghost {
+  padding: 7px 16px; border-radius: 9px;
+  font-size: 13px; font-weight: 600; color: var(--text2);
+  border: 1px solid var(--border2); background: none;
+  cursor: pointer; transition: all .2s; font-family: inherit;
+}
+.nav-btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.nav-btn-live {
+  padding: 7px 16px; border-radius: 9px;
+  font-size: 13px; font-weight: 700; color: #fff;
+  background: var(--red);
+  border: none; cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; gap: 6px;
+  box-shadow: 0 0 20px var(--red-glow); font-family: inherit;
+}
+.nav-btn-live:hover { transform: translateY(-1px); box-shadow: 0 4px 24px var(--red-glow); }
+.pulse { width: 7px; height: 7px; border-radius: 50%; background: #fff; animation: p 1.4s ease infinite; }
+@keyframes p { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.4)} }
 
-/* EMPTY STATE */
-.empty-state{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:80px 24px;text-align:center;
-  background:var(--card);border:1px dashed var(--border);
-  border-radius:20px;margin-bottom:32px;
-}
-.empty-icon{font-size:56px;margin-bottom:16px;opacity:.4;}
-.empty-title{font-size:20px;font-weight:700;margin-bottom:8px;color:#555;}
-.empty-sub{font-size:14px;color:var(--muted);max-width:340px;line-height:1.6;}
+/* ═══════════════ PAGES ═══════════════ */
+.page { display: none; padding-top: 56px; }
+.page.on { display: block; }
 
-/* SECTION */
-main{max-width:1280px;margin:0 auto;padding:0 24px 80px;}
-.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;margin-top:48px;}
-.sec-title{font-size:20px;font-weight:800;}
+/* ═══════════════ HOME ═══════════════ */
+.hero {
+  min-height: calc(100vh - 56px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 60px 24px;
+  position: relative; overflow: hidden;
+}
+/* Background grid */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(108,99,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(108,99,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+/* Glow orbs */
+.orb1 {
+  position: absolute; width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,45,85,0.12) 0%, transparent 70%);
+  top: 10%; left: 20%; pointer-events: none;
+  animation: drift1 8s ease-in-out infinite alternate;
+}
+.orb2 {
+  position: absolute; width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(108,99,255,0.1) 0%, transparent 70%);
+  bottom: 20%; right: 15%; pointer-events: none;
+  animation: drift2 10s ease-in-out infinite alternate;
+}
+@keyframes drift1 { from{transform:translate(0,0)} to{transform:translate(30px,20px)} }
+@keyframes drift2 { from{transform:translate(0,0)} to{transform:translate(-20px,30px)} }
 
-/* CATEGORIES */
-.cats{display:flex;gap:10px;flex-wrap:wrap;margin-top:32px;}
-.cat{
-  padding:8px 20px;border-radius:20px;font-size:14px;font-weight:600;
-  border:1px solid var(--border);background:var(--card);color:var(--muted);
-  cursor:pointer;transition:.2s;
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,45,85,0.08); border: 1px solid rgba(255,45,85,0.2);
+  color: var(--red); font-size: 12px; font-weight: 700;
+  padding: 5px 14px; border-radius: 20px;
+  letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 32px; position: relative; z-index: 1;
 }
-.cat:hover,.cat.active{border-color:rgba(255,59,92,0.4);color:var(--red);background:rgba(255,59,92,0.06);}
+.hero h1 {
+  font-size: clamp(48px, 10vw, 88px); font-weight: 900;
+  line-height: .95; letter-spacing: -4px;
+  margin-bottom: 24px; position: relative; z-index: 1;
+}
+.hero h1 .line1 { display: block; color: var(--text); }
+.hero h1 .line2 {
+  display: block;
+  background: linear-gradient(135deg, var(--red) 0%, var(--accent2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-p {
+  font-size: 17px; color: var(--text2); max-width: 460px;
+  line-height: 1.7; margin-bottom: 40px; position: relative; z-index: 1;
+}
+.hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; z-index: 1; position: relative; }
+.btn-primary {
+  background: var(--red); color: #fff; font-weight: 800; font-size: 15px;
+  padding: 14px 32px; border-radius: 12px; border: none; cursor: pointer;
+  box-shadow: 0 8px 32px var(--red-glow); transition: all .2s;
+  display: flex; align-items: center; gap: 8px; font-family: inherit;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px var(--red-glow); }
+.btn-outline {
+  background: transparent; color: var(--text); font-weight: 600; font-size: 15px;
+  padding: 14px 32px; border-radius: 12px;
+  border: 1px solid var(--border2); cursor: pointer; transition: all .2s; font-family: inherit;
+}
+.btn-outline:hover { background: var(--surface); border-color: var(--border2); }
 
-/* FEATURES */
-.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:32px;}
-.feat-item{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:18px;padding:24px;transition:.2s;
+/* Features */
+.features {
+  max-width: 1100px; margin: 0 auto; padding: 80px 24px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border); border-radius: 20px; overflow: hidden;
 }
-.feat-item:hover{border-color:#333;transform:translateY(-2px);}
-.fi-icon{font-size:32px;margin-bottom:14px;}
-.fi-title{font-size:16px;font-weight:700;margin-bottom:8px;}
-.fi-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+.feat {
+  padding: 32px 28px; background: var(--bg1); transition: background .2s;
+}
+.feat:hover { background: var(--bg2); }
+.feat-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 16px;
+}
+.feat h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.feat p { font-size: 14px; color: var(--text2); line-height: 1.6; }
 
-/* PROFILE PAGE */
-.profile-page{padding:90px 24px 60px;max-width:800px;margin:0 auto;}
-.profile-cover{
-  height:180px;border-radius:20px;
-  background:linear-gradient(135deg,#1a0a0a,#1a0a2e);
-  border:1px solid var(--border);position:relative;margin-bottom:60px;
+/* Empty state */
+.empty {
+  max-width: 400px; margin: 80px auto;
+  text-align: center; padding: 0 24px;
 }
-.profile-av-wrap{
-  position:absolute;bottom:-40px;left:32px;
-  width:80px;height:80px;border-radius:50%;
-  background:var(--card);border:3px solid var(--bg);
-  display:flex;align-items:center;justify-content:center;font-size:36px;
+.empty-ring {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; margin: 0 auto 20px;
 }
-.profile-edit-btn{
-  position:absolute;bottom:16px;right:16px;
-  background:var(--card);border:1px solid var(--border);
-  color:#fff;font-size:13px;font-weight:600;padding:8px 18px;border-radius:10px;cursor:pointer;
-}
-.profile-info{margin-bottom:32px;}
-.profile-name-big{font-size:26px;font-weight:900;margin-bottom:4px;}
-.profile-handle{font-size:15px;color:var(--muted);margin-bottom:16px;}
-.profile-stats{display:flex;gap:32px;flex-wrap:wrap;}
-.ps{text-align:left;}
-.ps-n{font-size:22px;font-weight:800;}
-.ps-l{font-size:13px;color:var(--muted);}
-.no-lives{
-  background:var(--card);border:1px dashed var(--border);
-  border-radius:16px;padding:48px;text-align:center;
-}
-.no-lives-icon{font-size:48px;margin-bottom:12px;opacity:.4;}
-.no-lives-text{font-size:15px;color:var(--muted);}
+.empty h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.empty p { font-size: 14px; color: var(--text2); line-height: 1.6; }
 
-/* GO LIVE ROOM */
-.golive-page{padding:90px 24px 60px;max-width:900px;margin:0 auto;}
-.room-setup{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:20px;overflow:hidden;
+/* Category pills */
+.cats {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  padding: 24px 24px 0; max-width: 1100px; margin: 0 auto;
 }
-.room-setup-top{
-  padding:20px 24px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:12px;
+.cat {
+  padding: 7px 16px; border-radius: 20px; font-size: 13px; font-weight: 600;
+  border: 1px solid var(--border); color: var(--text3); cursor: pointer; transition: all .2s;
 }
-.live-indicator{
-  display:flex;align-items:center;gap:8px;
-  background:rgba(255,59,92,0.1);border:1px solid rgba(255,59,92,0.25);
-  color:var(--red);font-size:13px;font-weight:700;
-  padding:5px 14px;border-radius:20px;
-}
-.room-body-setup{display:flex;min-height:420px;}
-.camera-preview{
-  flex:1;background:#000;border-right:1px solid var(--border);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:16px;
-}
-.camera-off{text-align:center;}
-.camera-off-icon{font-size:64px;margin-bottom:12px;opacity:.3;}
-.camera-off-text{font-size:15px;color:var(--muted);margin-bottom:20px;}
-.btn-cam{
-  background:var(--card);border:1px solid var(--border);
-  color:#fff;font-weight:600;font-size:14px;
-  padding:11px 24px;border-radius:12px;cursor:pointer;transition:.2s;
-  display:flex;align-items:center;gap:8px;
-}
-.btn-cam:hover{background:#222;}
-.room-settings{width:300px;padding:24px;display:flex;flex-direction:column;gap:16px;}
-.rs-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
-.rs-inp{
-  width:100%;background:var(--bg);border:1px solid var(--border);
-  color:#fff;font-size:14px;padding:12px 16px;border-radius:12px;outline:none;transition:.2s;
-}
-.rs-inp:focus{border-color:rgba(255,59,92,0.4);}
-.rs-select{
-  width:100%;background:var(--bg);border:1px solid var(--border);
-  color:#fff;font-size:14px;padding:12px 16px;border-radius:12px;outline:none;
-  -webkit-appearance:none;
-}
-.btn-start-live{
-  width:100%;padding:14px;border-radius:12px;
-  background:linear-gradient(135deg,var(--red),var(--red2));
-  border:none;color:#fff;font-weight:800;font-size:15px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  box-shadow:0 4px 20px rgba(255,59,92,0.3);transition:.2s;margin-top:auto;
-}
-.btn-start-live:hover{opacity:.9;}
+.cat:hover { color: var(--text2); border-color: var(--border2); }
+.cat.on { color: var(--red); border-color: rgba(255,45,85,0.3); background: rgba(255,45,85,0.06); }
 
-/* AUTH MODAL */
-.modal-bg{
-  display:none;position:fixed;inset:0;z-index:500;
-  background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);
-  align-items:center;justify-content:center;padding:24px;
-}
-.modal-bg.show{display:flex;}
-.modal{
-  background:var(--bg2);border:1px solid var(--border);
-  border-radius:24px;padding:36px;width:100%;max-width:400px;position:relative;
-}
-.modal-close{
-  position:absolute;top:16px;right:16px;
-  background:var(--card);border:1px solid var(--border);color:var(--muted);
-  width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:15px;
-}
-.modal h2{font-size:24px;font-weight:900;margin-bottom:6px;}
-.modal-sub{font-size:14px;color:var(--muted);margin-bottom:28px;}
-.m-inp{
-  width:100%;background:var(--card);border:1px solid var(--border);
-  color:#fff;font-size:15px;padding:13px 16px;border-radius:12px;
-  outline:none;margin-bottom:12px;transition:.2s;
-}
-.m-inp:focus{border-color:rgba(255,59,92,0.5);}
-.m-btn{
-  width:100%;padding:14px;border-radius:12px;
-  background:linear-gradient(135deg,var(--red),var(--purple));
-  border:none;color:#fff;font-weight:800;font-size:15px;cursor:pointer;
-  margin-bottom:16px;
-}
-.m-divider{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
-.m-divider::before,.m-divider::after{content:'';flex:1;height:1px;background:var(--border);}
-.m-divider span{font-size:13px;color:var(--muted);}
-.m-social{
-  width:100%;padding:12px;border-radius:12px;
-  background:var(--card);border:1px solid var(--border);
-  color:#fff;font-weight:600;font-size:14px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  margin-bottom:10px;transition:.2s;
-}
-.m-social:hover{background:#222;}
-.m-switch{text-align:center;font-size:13px;color:var(--muted);margin-top:8px;}
-.m-switch a{color:var(--red);cursor:pointer;font-weight:600;}
+.sec { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+.sec-h { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
 
-footer{
-  border-top:1px solid var(--border);padding:28px 24px;
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+/* ═══════════════ GO LIVE PAGE ═══════════════ */
+.golive-wrap {
+  max-width: 860px; margin: 0 auto; padding: 48px 24px;
 }
-.footer-logo{font-size:18px;font-weight:900;}
-.footer-logo span{background:linear-gradient(135deg,var(--red),var(--purple2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.footer-links{display:flex;gap:20px;}
-.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:.2s;}
-.footer-links a:hover{color:#fff;}
-.footer-copy{font-size:12px;color:var(--muted2);}
+.golive-header { margin-bottom: 32px; }
+.golive-header h1 { font-size: 28px; font-weight: 900; letter-spacing: -1px; margin-bottom: 6px; }
+.golive-header p { font-size: 15px; color: var(--text2); }
 
-.page{display:none;}
-.page.active{display:block;}
+.studio {
+  background: var(--bg1); border: 1px solid var(--border);
+  border-radius: 20px; overflow: hidden;
+}
+.studio-toolbar {
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.studio-dot { width: 10px; height: 10px; border-radius: 50%; }
+.d-red { background: #ff5f57; }
+.d-yellow { background: #febc2e; }
+.d-green { background: #28c840; }
+.studio-name { font-size: 13px; color: var(--text3); margin-left: 8px; }
+.studio-live-badge {
+  margin-left: auto; display: flex; align-items: center; gap: 6px;
+  background: rgba(255,45,85,0.1); border: 1px solid rgba(255,45,85,0.2);
+  color: var(--red); font-size: 12px; font-weight: 700;
+  padding: 4px 12px; border-radius: 20px; letter-spacing: 1px;
+}
+
+.studio-body {
+  display: grid; grid-template-columns: 1fr 300px;
+}
+.studio-preview {
+  background: #000; min-height: 380px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.cam-off {
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  text-align: center; padding: 24px;
+}
+.cam-icon {
+  width: 72px; height: 72px; border-radius: 20px;
+  background: var(--surface); border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center; font-size: 32px;
+}
+.cam-off h3 { font-size: 16px; font-weight: 700; }
+.cam-off p { font-size: 13px; color: var(--text2); }
+.btn-cam {
+  padding: 10px 22px; border-radius: 10px;
+  background: var(--surface); border: 1px solid var(--border2);
+  color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all .2s; font-family: inherit;
+}
+.btn-cam:hover { background: var(--surface2); }
+video#feed { width: 100%; height: 100%; object-fit: cover; display: none; }
+
+.studio-panel {
+  border-left: 1px solid var(--border);
+  padding: 20px; display: flex; flex-direction: column; gap: 16px;
+}
+.sp-label {
+  font-size: 11px; font-weight: 700; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;
+}
+.sp-inp {
+  width: 100%; background: var(--bg2); border: 1px solid var(--border);
+  color: var(--text); font-size: 14px; padding: 11px 14px;
+  border-radius: 10px; outline: none; transition: border .2s; font-family: inherit;
+}
+.sp-inp:focus { border-color: rgba(108,99,255,0.4); }
+.sp-select {
+  width: 100%; background: var(--bg2); border: 1px solid var(--border);
+  color: var(--text); font-size: 14px; padding: 11px 14px;
+  border-radius: 10px; outline: none; font-family: inherit;
+  -webkit-appearance: none;
+}
+.sp-privacy {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+.priv-opt {
+  padding: 10px 12px; border-radius: 10px;
+  border: 1px solid var(--border); cursor: pointer; transition: all .2s;
+  text-align: center; font-size: 12px; font-weight: 600; color: var(--text3);
+}
+.priv-opt.on { border-color: rgba(108,99,255,0.4); color: var(--accent2); background: rgba(108,99,255,0.08); }
+.btn-golive {
+  width: 100%; padding: 13px; border-radius: 11px;
+  background: var(--red); border: none; color: #fff;
+  font-weight: 800; font-size: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 4px 20px var(--red-glow); transition: all .2s; font-family: inherit;
+  margin-top: auto;
+}
+.btn-golive:hover { opacity: .9; }
+
+/* ═══════════════ PROFILE PAGE ═══════════════ */
+.profile-wrap {
+  max-width: 960px; margin: 0 auto; padding: 32px 24px;
+}
+
+/* Auth wall */
+.auth-wall {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; min-height: calc(100vh - 120px);
+  text-align: center; padding: 40px 24px;
+}
+.auth-visual {
+  position: relative; margin-bottom: 40px;
+}
+.auth-circle {
+  width: 120px; height: 120px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px; margin: 0 auto;
+  box-shadow: 0 0 0 16px rgba(108,99,255,0.04), 0 0 0 32px rgba(108,99,255,0.02);
+}
+.auth-wall h2 { font-size: 26px; font-weight: 900; margin-bottom: 10px; letter-spacing: -0.5px; }
+.auth-wall p { font-size: 15px; color: var(--text2); max-width: 360px; line-height: 1.7; margin-bottom: 32px; }
+.auth-btns { display: flex; gap: 10px; }
+.auth-perks {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  margin-top: 32px; max-width: 460px;
+}
+.perk {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg2); border: 1px solid var(--border);
+  padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; color: var(--text2);
+}
+
+/* Real profile (logged in state) */
+.profile-cover {
+  height: 200px; border-radius: 18px; margin-bottom: 0;
+  background: linear-gradient(135deg, #0d0d20 0%, #1a0520 50%, #0d0d20 100%);
+  border: 1px solid var(--border); position: relative; overflow: hidden;
+}
+.profile-cover::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(108,99,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(108,99,255,0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.profile-cover-edit {
+  position: absolute; bottom: 12px; right: 12px;
+  background: rgba(0,0,0,0.6); border: 1px solid var(--border2);
+  color: var(--text2); font-size: 12px; font-weight: 600;
+  padding: 6px 14px; border-radius: 8px; cursor: pointer; backdrop-filter: blur(8px);
+}
+.profile-av {
+  width: 88px; height: 88px; border-radius: 50%;
+  background: var(--surface); border: 3px solid var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px; margin-top: -44px; margin-left: 24px;
+  position: relative; z-index: 1;
+}
+.profile-meta {
+  padding: 12px 24px 24px;
+  display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+}
+.profile-meta-l h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+.profile-meta-l .handle { font-size: 14px; color: var(--text2); margin: 4px 0 12px; }
+.profile-stats { display: flex; gap: 24px; }
+.ps-item { text-align: center; }
+.ps-n { font-size: 20px; font-weight: 800; }
+.ps-l { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.profile-meta-r { display: flex; gap: 8px; margin-top: 8px; }
+.btn-sm {
+  padding: 9px 20px; border-radius: 9px; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all .2s; font-family: inherit; border: none;
+}
+.btn-sm-red { background: var(--red); color: #fff; box-shadow: 0 4px 16px var(--red-glow); }
+.btn-sm-ghost { background: var(--surface); color: var(--text); border: 1px solid var(--border2) !important; border: none; }
+
+/* Profile tabs */
+.profile-tabs {
+  display: flex; border-bottom: 1px solid var(--border);
+  padding: 0 24px; margin-top: 8px;
+}
+.p-tab {
+  padding: 12px 16px; font-size: 14px; font-weight: 600; color: var(--text3);
+  cursor: pointer; border-bottom: 2px solid transparent; transition: all .2s;
+  margin-bottom: -1px;
+}
+.p-tab:hover { color: var(--text2); }
+.p-tab.on { color: var(--text); border-color: var(--red); }
+
+.profile-content { padding: 24px; }
+
+/* ═══════════════ LIVE ROOM ═══════════════ */
+.live-room {
+  position: fixed; inset: 0; z-index: 900;
+  background: var(--bg); display: none;
+  flex-direction: column;
+}
+.live-room.show { display: flex; }
+.lr-header {
+  height: 52px; background: rgba(5,5,10,0.9); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 20px; gap: 14px; flex-shrink: 0;
+}
+.lr-live-tag {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--red); color: #fff;
+  font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 6px; letter-spacing: 1px;
+}
+.lr-title { font-size: 14px; font-weight: 700; flex: 1; }
+.lr-viewers { font-size: 13px; color: var(--text2); display: flex; align-items: center; gap: 6px; }
+.lr-close {
+  width: 32px; height: 32px; border-radius: 8px; background: var(--surface);
+  border: none; color: var(--text2); cursor: pointer; font-size: 16px; transition: all .2s;
+}
+.lr-close:hover { background: var(--surface2); color: var(--text); }
+.lr-body { flex: 1; display: flex; min-height: 0; }
+.lr-video {
+  flex: 1; background: #000;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.lr-video-placeholder { text-align: center; }
+.lr-video-placeholder .big { font-size: 72px; margin-bottom: 16px; }
+.lr-video-placeholder p { font-size: 14px; color: var(--text2); }
+video#liveVid { width: 100%; height: 100%; object-fit: cover; display: none; }
+.lr-sidebar {
+  width: 320px; border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; flex-shrink: 0;
+}
+.lr-chat-header {
+  padding: 14px 16px; border-bottom: 1px solid var(--border);
+  font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px;
+}
+.lr-chat-msgs {
+  flex: 1; overflow-y: auto; padding: 12px;
+  display: flex; flex-direction: column; gap: 6px;
+  scroll-behavior: smooth;
+}
+.lr-chat-msgs::-webkit-scrollbar { width: 4px; }
+.lr-chat-msgs::-webkit-scrollbar-track { background: transparent; }
+.lr-chat-msgs::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 4px; }
+.chat-msg { font-size: 13px; line-height: 1.5; padding: 2px 0; }
+.chat-msg .cn { font-weight: 700; margin-right: 6px; }
+.chat-msg .ct { color: rgba(240,240,248,0.75); }
+.lr-chat-footer { padding: 12px; border-top: 1px solid var(--border); }
+.chat-input-row { display: flex; gap: 8px; }
+.chat-inp {
+  flex: 1; background: var(--surface); border: 1px solid var(--border);
+  color: var(--text); font-size: 13px; padding: 10px 14px;
+  border-radius: 10px; outline: none; font-family: inherit;
+}
+.chat-inp:focus { border-color: rgba(108,99,255,0.3); }
+.chat-send {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: var(--accent); border: none; color: #fff; cursor: pointer;
+  font-size: 16px; flex-shrink: 0; transition: opacity .2s;
+}
+.chat-send:hover { opacity: .85; }
+.lr-controls {
+  padding: 12px 16px; border-top: 1px solid var(--border);
+  display: flex; gap: 8px; justify-content: center;
+}
+.ctrl-btn {
+  padding: 9px 18px; border-radius: 9px; font-size: 13px; font-weight: 600;
+  cursor: pointer; border: 1px solid var(--border2); background: var(--surface);
+  color: var(--text2); transition: all .2s; font-family: inherit;
+}
+.ctrl-btn.danger { background: rgba(255,45,85,0.1); border-color: rgba(255,45,85,0.3); color: var(--red); }
+
+/* ═══════════════ AUTH MODAL ═══════════════ */
+.overlay {
+  display: none; position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(12px);
+  align-items: center; justify-content: center; padding: 24px;
+}
+.overlay.show { display: flex; }
+.modal {
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 20px; width: 100%; max-width: 400px;
+  overflow: hidden; animation: slideUp .25s ease both;
+}
+@keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+.modal-top {
+  padding: 28px 28px 0;
+}
+.modal-top h2 { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 4px; }
+.modal-top p { font-size: 14px; color: var(--text2); margin-bottom: 24px; }
+.modal-body { padding: 0 28px 28px; }
+.m-inp {
+  width: 100%; background: var(--bg1); border: 1px solid var(--border);
+  color: var(--text); font-size: 14px; padding: 12px 16px;
+  border-radius: 11px; outline: none; margin-bottom: 10px;
+  transition: border .2s; font-family: inherit;
+}
+.m-inp:focus { border-color: rgba(108,99,255,0.45); }
+.m-btn {
+  width: 100%; padding: 13px; border-radius: 11px; margin-top: 4px;
+  background: linear-gradient(135deg, var(--red), var(--accent));
+  border: none; color: #fff; font-weight: 800; font-size: 14px;
+  cursor: pointer; font-family: inherit; transition: opacity .2s;
+}
+.m-btn:hover { opacity: .9; }
+.m-or {
+  display: flex; align-items: center; gap: 12px;
+  margin: 14px 0; color: var(--text3); font-size: 13px;
+}
+.m-or::before, .m-or::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.m-google {
+  width: 100%; padding: 12px; border-radius: 11px;
+  background: var(--surface); border: 1px solid var(--border2);
+  color: var(--text); font-size: 14px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+  font-family: inherit; transition: background .2s;
+}
+.m-google:hover { background: var(--surface2); }
+.m-footer {
+  padding: 16px 28px; border-top: 1px solid var(--border);
+  text-align: center; font-size: 13px; color: var(--text2);
+}
+.m-footer a { color: var(--accent2); cursor: pointer; font-weight: 600; }
+.m-close-row {
+  display: flex; justify-content: flex-end; padding: 14px 14px 0;
+}
+.m-close {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--surface); border: none; color: var(--text3);
+  cursor: pointer; font-size: 14px;
+}
+
+/* Fake logged in state */
+#loggedInProfile { display: none; }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">
-    <div class="logo-dot">🔴</div>
-    <div class="logo-text">Buzz<span>Live</span></div>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-logo" onclick="goTo('home')">
+    <div class="nav-logo-mark"></div>
+    <div class="nav-logo-text">BuzzLive</div>
   </div>
-  <div class="header-center">
-    <button class="h-tab active" onclick="goPage(this,'home')">Efirlar</button>
-    <button class="h-tab" onclick="goPage(this,'golive')">Go Live</button>
-    <button class="h-tab" onclick="goPage(this,'profile')">Profil</button>
+  <div class="nav-tabs">
+    <button class="nav-tab on" onclick="goTo('home',this)">Efirlar</button>
+    <button class="nav-tab" onclick="goTo('golive',this)">Studio</button>
+    <button class="nav-tab" onclick="goTo('profile',this)">Profil</button>
   </div>
-  <div class="header-r">
-    <div class="search-box">
-      <span style="color:var(--muted)">🔍</span>
-      <input type="text" placeholder="Qidirish...">
-    </div>
-    <button class="btn-signin" onclick="showModal('login')">Kirish</button>
-    <button class="btn-golive" onclick="goPage(document.querySelector(\'.h-tab:nth-child(2)\'),\'golive\')">
-      <div class="live-dot"></div> LIVE boshlash
-    </button>
+  <div class="nav-search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--text3)"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="text" placeholder="Efir qidirish...">
   </div>
-</header>
+  <button class="nav-btn-ghost" onclick="openAuth('login')">Kirish</button>
+  <button class="nav-btn-live" onclick="goTo('golive')">
+    <div class="pulse"></div> LIVE
+  </button>
+</nav>
 
-<!-- HOME -->
-<div class="page active" id="page-home">
+<!-- ═══ HOME PAGE ═══ -->
+<div class="page on" id="page-home">
   <div class="hero">
-    <div class="hero-content">
-      <h1>Faqat <span class="gr">JONLI EFIR</span><br>platformasi</h1>
-      <p class="hero-sub">Post yo'q. Reels yo'q. Faqat haqiqiy jonli efirlar. O'rganish, o'rgatish, muloqot — barchasi real vaqtda.</p>
-      <div class="hero-btns">
-        <button class="btn-start" onclick="goPage(document.querySelectorAll('.h-tab')[1],'golive')">
-          <div class="live-dot"></div> LIVE boshlash
-        </button>
-        <button class="btn-ghost" onclick="showModal('register')">Ro'yxatdan o'tish</button>
-      </div>
+    <div class="orb1"></div>
+    <div class="orb2"></div>
+    <div class="hero-tag"><div class="pulse"></div> JONLI EFIR PLATFORMASI</div>
+    <h1>
+      <span class="line1">Post emas.</span>
+      <span class="line2">Faqat LIVE.</span>
+    </h1>
+    <p class="hero-p">Yozilgan kontent emas — haqiqiy, jonli, filtrsiz efirlar. O'rganish, o'rgatish va muloqot qilish uchun yaratilgan.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="openAuth('register')">
+        <div class="pulse"></div> Efir boshlash
+      </button>
+      <button class="btn-outline" onclick="openAuth('register')">Ro'yxatdan o'tish →</button>
     </div>
   </div>
 
-  <main>
-    <div class="cats">
-      <div class="cat active">🔴 Barchasi</div>
-      <div class="cat">📚 Ta'lim</div>
-      <div class="cat">🎵 Musiqa</div>
-      <div class="cat">🎮 O'yinlar</div>
-      <div class="cat">💻 Dasturlash</div>
-      <div class="cat">🎨 San'at</div>
-      <div class="cat">💪 Sport</div>
-      <div class="cat">🍳 Oshpazlik</div>
-    </div>
+  <div class="cats" style="padding-top:0;">
+    <div class="cat on">Barchasi</div>
+    <div class="cat">📚 Ta'lim</div>
+    <div class="cat">🎵 Musiqa</div>
+    <div class="cat">💻 Dasturlash</div>
+    <div class="cat">🎨 San'at</div>
+    <div class="cat">🎮 O'yinlar</div>
+    <div class="cat">💪 Sport</div>
+    <div class="cat">🏫 Maktab</div>
+  </div>
 
-    <div class="sec-header">
-      <div class="sec-title">📡 Jonli efirlar</div>
+  <div class="sec">
+    <div class="sec-h">📡 Jonli efirlar</div>
+    <div class="empty">
+      <div class="empty-ring">📡</div>
+      <h3>Hozircha hech kim efirda emas</h3>
+      <p style="margin-top:8px;">Birinchi bo'lib efir boshlang. Hamma o'z efirini siz ko'rsatgan yo'ldan boshlagan.</p>
+      <button class="btn-primary" style="margin:24px auto 0;display:flex;" onclick="goTo('golive')">
+        <div class="pulse"></div> Birinchi efirni boshlash
+      </button>
     </div>
+  </div>
 
-    <div class="empty-state">
-      <div class="empty-icon">📡</div>
-      <div class="empty-title">Hozircha hech kim efirda emas</div>
-      <div class="empty-sub">Birinchi bo'lib efir boshlang! Platformaga yangi foydalanuvchilar qo'shilgach, bu yerda jonli efirlar ko'rinadi.</div>
-    </div>
-
-    <div class="sec-header" style="margin-top:0">
-      <div class="sec-title">⚡ Platform imkoniyatlari</div>
-    </div>
-    <div class="feats">
-      <div class="feat-item">
-        <div class="fi-icon">🔴</div>
-        <div class="fi-title">Faqat jonli efir</div>
-        <div class="fi-desc">Post, story, reel yo'q. Faqat real vaqtdagi jonli efirlar. Haqiqiy, filtersiz muloqot.</div>
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px 80px;">
+    <div class="features">
+      <div class="feat">
+        <div class="feat-icon" style="background:rgba(255,45,85,0.1)">🔴</div>
+        <h3>Faqat jonli efir</h3>
+        <p>Post, story, reel — hech biri yo'q. Faqat real vaqtdagi jonli efirlar. Haqiqiy, filtrsiz muloqot.</p>
       </div>
-      <div class="feat-item">
-        <div class="fi-icon">👤</div>
-        <div class="fi-title">Shaxsiy profil</div>
-        <div class="fi-desc">O'z profilingiz, followerlar, efir tarixi va statistika sahifasi.</div>
+      <div class="feat">
+        <div class="feat-icon" style="background:rgba(108,99,255,0.1)">👤</div>
+        <h3>Shaxsiy profil</h3>
+        <p>Ro'yxatdan o'tgach to'liq profil: followers, efir tarixi, real-time chat va statistika.</p>
       </div>
-      <div class="feat-item">
-        <div class="fi-icon">🛡</div>
-        <div class="fi-title">Xavfsiz muhit</div>
-        <div class="fi-desc">Moderatsiya tizimi. Yosh cheklovi. Noto'g'ri kontent bloklash.</div>
+      <div class="feat">
+        <div class="feat-icon" style="background:rgba(48,209,88,0.1)">🛡</div>
+        <h3>Xavfsiz muhit</h3>
+        <p>Maktab o'quvchilari uchun moderatsiya. Yosh cheklovi va yopiq guruh efirlar.</p>
       </div>
-      <div class="feat-item">
-        <div class="fi-icon">📱</div>
-        <div class="fi-title">Brauzer orqali</div>
-        <div class="fi-desc">Ilova o'rnatmasdan to'g'ridan-to'g'ri brauzerdan efir boshlash.</div>
+      <div class="feat">
+        <div class="feat-icon" style="background:rgba(255,159,10,0.1)">📱</div>
+        <h3>Brauzerdan bevosita</h3>
+        <p>Ilova o'rnatish shart emas. Telefon yoki kompyuter brauzeridan kamera ulang va boshlang.</p>
       </div>
-      <div class="feat-item">
-        <div class="fi-icon">💬</div>
-        <div class="fi-title">Real-time chat</div>
-        <div class="fi-desc">Efir paytida jonli chat, reactions va savol-javob rejimi.</div>
+      <div class="feat">
+        <div class="feat-icon" style="background:rgba(100,210,255,0.1)">💬</div>
+        <h3>Real-time chat</h3>
+        <p>Efir davomida jonli chat, reactions, va to'g'ridan-to'g'ri savol berish imkoni.</p>
       </div>
-      <div class="feat-item">
-        <div class="fi-icon">🏫</div>
-        <div class="fi-title">Maktab guruhlar</div>
-        <div class="fi-desc">Sinf va maktab bo'yicha yopiq efir xonalari.</div>
+      <div class="feat">
+        <div class="feat-icon" style="background:rgba(255,45,85,0.1)">🏫</div>
+        <h3>Maktab guruhlar</h3>
+        <p>Faqat o'z sinfingiz yoki maktabingizga ko'rinadigan yopiq efir xonalari.</p>
       </div>
     </div>
-  </main>
+  </div>
 </div>
 
-<!-- GO LIVE -->
+<!-- ═══ STUDIO (GO LIVE) ═══ -->
 <div class="page" id="page-golive">
-  <div class="golive-page">
-    <h1 style="font-size:28px;font-weight:900;margin-bottom:6px;">🔴 Efir boshlash</h1>
-    <p style="color:var(--muted);font-size:15px;margin-bottom:28px;">Kamera va sozlamalarni tekshirib, efirni boshlang.</p>
-
-    <div class="room-setup">
-      <div class="room-setup-top">
-        <div class="live-indicator"><div class="live-dot"></div> TAYYOR</div>
-        <span style="font-size:14px;color:var(--muted)">Efir boshlanishidan oldin kamerani ulang</span>
+  <div class="golive-wrap">
+    <div class="golive-header">
+      <h1>🎙 Efir Studiyasi</h1>
+      <p>Kamerani ulab, sozlamalarni to'ldirib, efirni boshlang.</p>
+    </div>
+    <div class="studio">
+      <div class="studio-toolbar">
+        <div class="studio-dot d-red"></div>
+        <div class="studio-dot d-yellow"></div>
+        <div class="studio-dot d-green"></div>
+        <div class="studio-name">BuzzLive Studio</div>
+        <div class="studio-live-badge" style="margin-left:auto"><div class="pulse" style="background:var(--red)"></div> TAYYOR</div>
       </div>
-      <div class="room-body-setup">
-        <div class="camera-preview">
-          <div class="camera-off">
-            <div class="camera-off-icon">📷</div>
-            <div class="camera-off-text">Kamera o'chirilgan</div>
-            <button class="btn-cam" onclick="requestCamera()">📷 Kamerani yoqish</button>
+      <div class="studio-body">
+        <div class="studio-preview" id="camPreview">
+          <div class="cam-off" id="camOff">
+            <div class="cam-icon">📷</div>
+            <h3>Kamera o'chirilgan</h3>
+            <p>Efir boshlash uchun kamerani ulang</p>
+            <button class="btn-cam" onclick="startCam()">📷 Kamerani yoqish</button>
           </div>
-          <video id="cameraFeed" style="display:none;width:100%;height:100%;object-fit:cover;" autoplay muted playsinline></video>
+          <video id="feed" autoplay muted playsinline></video>
+          <div id="camOn" style="display:none;position:absolute;top:12px;left:12px;display:none">
+            <div class="studio-live-badge" style="background:rgba(0,0,0,0.6);backdrop-filter:blur(8px)">
+              <div class="pulse" style="background:var(--green)"></div> KAMERA ULANDI
+            </div>
+          </div>
         </div>
-        <div class="room-settings">
+        <div class="studio-panel">
           <div>
-            <div class="rs-label">Efir sarlavhasi</div>
-            <input class="rs-inp" type="text" id="liveTitle" placeholder="Masalan: Matematika darsi #1">
+            <div class="sp-label">Efir sarlavhasi</div>
+            <input class="sp-inp" id="lTitle" type="text" placeholder="Masalan: Python darsi #1">
           </div>
           <div>
-            <div class="rs-label">Kategoriya</div>
-            <select class="rs-select" id="liveCategory">
-              <option value="">Kategoriya tanlang</option>
+            <div class="sp-label">Kategoriya</div>
+            <select class="sp-select" id="lCat">
+              <option value="">Tanlang</option>
               <option>📚 Ta'lim</option>
               <option>🎵 Musiqa</option>
               <option>💻 Dasturlash</option>
@@ -414,18 +704,20 @@ footer{
               <option>🎮 O'yinlar</option>
               <option>💪 Sport</option>
               <option>🍳 Oshpazlik</option>
+              <option>🏫 Maktab darsi</option>
             </select>
           </div>
           <div>
-            <div class="rs-label">Kim ko'ra oladi</div>
-            <select class="rs-select">
-              <option>🌍 Hamma</option>
-              <option>🏫 Faqat maktabim</option>
-              <option>🔒 Faqat followerlar</option>
-            </select>
+            <div class="sp-label">Kim ko'ra oladi</div>
+            <div class="sp-privacy">
+              <div class="priv-opt on" onclick="pickPriv(this)">🌍 Hamma</div>
+              <div class="priv-opt" onclick="pickPriv(this)">🏫 Maktab</div>
+              <div class="priv-opt" onclick="pickPriv(this)">👥 Followers</div>
+              <div class="priv-opt" onclick="pickPriv(this)">🔒 Yopiq</div>
+            </div>
           </div>
-          <button class="btn-start-live" onclick="startLive()">
-            <div class="live-dot"></div> EFIRNI BOSHLASH
+          <button class="btn-golive" onclick="tryGoLive()">
+            <div class="pulse"></div> EFIRNI BOSHLASH
           </button>
         </div>
       </div>
@@ -433,118 +725,292 @@ footer{
   </div>
 </div>
 
-<!-- PROFILE -->
+<!-- ═══ PROFILE PAGE ═══ -->
 <div class="page" id="page-profile">
-  <div class="profile-page">
-    <div class="profile-cover">
-      <div class="profile-av-wrap">👤</div>
-      <button class="profile-edit-btn" onclick="showModal('register')">✏️ Tahrirlash</button>
+  <!-- AUTH WALL (not logged in) -->
+  <div class="auth-wall" id="authWall">
+    <div class="auth-visual">
+      <div class="auth-circle">🔐</div>
     </div>
-    <div class="profile-info">
-      <div class="profile-name-big">Foydalanuvchi nomi</div>
-      <div class="profile-handle">@username · Ro'yxatdan o'ting</div>
-      <div class="profile-stats">
-        <div class="ps"><div class="ps-n">0</div><div class="ps-l">Followers</div></div>
-        <div class="ps"><div class="ps-n">0</div><div class="ps-l">Following</div></div>
-        <div class="ps"><div class="ps-n">0</div><div class="ps-l">Efirlar</div></div>
+    <h2>Profilni ko'rish uchun kiring</h2>
+    <p>Ro'yxatdan o'ting va to'liq imkoniyatlarga ega bo'ling: jonli efir, chat, followers va ko'p narsa.</p>
+    <div class="auth-btns">
+      <button class="btn-primary" onclick="openAuth('register')">Ro'yxatdan o'tish →</button>
+      <button class="btn-outline" onclick="openAuth('login')">Kirish</button>
+    </div>
+    <div class="auth-perks">
+      <div class="perk">🔴 Jonli efir boshlash</div>
+      <div class="perk">💬 Real-time chat</div>
+      <div class="perk">👥 Followers</div>
+      <div class="perk">📊 Statistika</div>
+      <div class="perk">🏫 Maktab guruhlar</div>
+      <div class="perk">📁 Efir tarixi</div>
+    </div>
+  </div>
+
+  <!-- LOGGED IN PROFILE (hidden until login) -->
+  <div id="loggedInProfile">
+    <div style="max-width:960px;margin:0 auto;padding:24px;">
+      <div class="profile-cover">
+        <div class="profile-cover-edit">✏️ Muqovani o'zgartirish</div>
+      </div>
+      <div class="profile-av">👤</div>
+      <div class="profile-meta">
+        <div class="profile-meta-l">
+          <h2 id="profileName">Foydalanuvchi</h2>
+          <div class="handle" id="profileHandle">@username</div>
+          <div class="profile-stats">
+            <div class="ps-item"><div class="ps-n">0</div><div class="ps-l">Followers</div></div>
+            <div class="ps-item"><div class="ps-n">0</div><div class="ps-l">Following</div></div>
+            <div class="ps-item"><div class="ps-n">0</div><div class="ps-l">Efirlar</div></div>
+          </div>
+        </div>
+        <div class="profile-meta-r">
+          <button class="btn-sm btn-sm-red" onclick="goTo('golive')"><div class="pulse" style="display:inline-block;margin-right:6px"></div>LIVE boshlash</button>
+          <button class="btn-sm btn-sm-ghost" style="background:var(--surface);border:1px solid var(--border2);color:var(--text)">⚙️ Sozlamalar</button>
+        </div>
+      </div>
+      <div class="profile-tabs">
+        <div class="p-tab on">Efirlar</div>
+        <div class="p-tab">Haqida</div>
+        <div class="p-tab">Statistika</div>
+      </div>
+      <div class="profile-content">
+        <div class="empty" style="margin:40px auto;">
+          <div class="empty-ring">🎬</div>
+          <h3>Hali hech qanday efir yo'q</h3>
+          <p>Birinchi efringizni boshlang — u shu yerda ko'rinadi.</p>
+          <button class="btn-primary" style="margin:20px auto 0;display:flex;" onclick="goTo('golive')">
+            <div class="pulse"></div> Birinchi efirni boshlash
+          </button>
+        </div>
       </div>
     </div>
-    <div class="no-lives">
-      <div class="no-lives-icon">🎬</div>
-      <div class="no-lives-text" style="font-size:16px;font-weight:700;margin-bottom:8px;color:#555;">Hali hech qanday efir yo'q</div>
-      <div class="no-lives-text">Birinchi efringizni boshlang — u shu yerda ko'rinadi.</div>
-      <button class="btn-start" style="margin-top:24px" onclick="goPage(document.querySelectorAll('.h-tab')[1],'golive')">
-        <div class="live-dot"></div> Birinchi efirni boshlash
-      </button>
+  </div>
+</div>
+
+<!-- ═══ LIVE ROOM ═══ -->
+<div class="live-room" id="liveRoom">
+  <div class="lr-header">
+    <div class="lr-live-tag"><div class="pulse"></div> JONLI EFIR</div>
+    <div class="lr-title" id="lrTitle">Efir nomi</div>
+    <div class="lr-viewers">👁 <span id="lrViewers">0</span></div>
+    <button class="lr-close" onclick="closeLiveRoom()">✕</button>
+  </div>
+  <div class="lr-body">
+    <div class="lr-video">
+      <video id="liveVid" autoplay muted playsinline></video>
+      <div class="lr-video-placeholder" id="lrPlaceholder">
+        <div class="big">🎙</div>
+        <p>Kamera ulanmagan</p>
+      </div>
+    </div>
+    <div class="lr-sidebar">
+      <div class="lr-chat-header">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Jonli chat
+      </div>
+      <div class="lr-chat-msgs" id="lrMsgs"></div>
+      <div class="lr-controls">
+        <button class="ctrl-btn">🎤 Mikrofon</button>
+        <button class="ctrl-btn">📷 Kamera</button>
+        <button class="ctrl-btn danger" onclick="closeLiveRoom()">⏹ Tugatish</button>
+      </div>
+      <div class="lr-chat-footer">
+        <div class="chat-input-row">
+          <input class="chat-inp" id="lrChatInp" placeholder="Xabar yozing..." onkeydown="if(event.key==='Enter')sendMsg()">
+          <button class="chat-send" onclick="sendMsg()">↑</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- AUTH MODAL -->
-<div class="modal-bg" id="modal">
+<!-- ═══ AUTH MODAL ═══ -->
+<div class="overlay" id="overlay">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div id="modal-login">
-      <h2>Kirish 👋</h2>
-      <p class="modal-sub">BuzzLive'ga xush kelibsiz</p>
-      <input class="m-inp" type="email" placeholder="Email manzil">
-      <input class="m-inp" type="password" placeholder="Parol">
-      <button class="m-btn" onclick="closeModal()">Kirish →</button>
-      <div class="m-divider"><span>yoki</span></div>
-      <button class="m-social">
-        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-        Google bilan kirish
-      </button>
-      <div class="m-switch">Akkaunt yo'qmi? <a onclick="switchModal('register')">Ro'yxatdan o'tish</a></div>
+    <div class="m-close-row">
+      <button class="m-close" onclick="closeOverlay()">✕</button>
     </div>
-    <div id="modal-register" style="display:none">
-      <h2>Ro'yxat 🔴</h2>
-      <p class="modal-sub">Bepul akkount yarating</p>
-      <input class="m-inp" type="text" placeholder="To'liq ism">
-      <input class="m-inp" type="text" placeholder="@username">
-      <input class="m-inp" type="email" placeholder="Email">
-      <input class="m-inp" type="password" placeholder="Parol (min 8 belgi)">
-      <button class="m-btn" onclick="closeModal()">Akkaunt yaratish →</button>
-      <div class="m-divider"><span>yoki</span></div>
-      <button class="m-social">
-        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-        Google bilan ro'yxatdan o'tish
-      </button>
-      <div class="m-switch">Allaqachon bor? <a onclick="switchModal('login')">Kirish</a></div>
+    <!-- LOGIN -->
+    <div id="formLogin">
+      <div class="modal-top">
+        <h2>Xush kelibsiz 👋</h2>
+        <p>BuzzLive'ga kirib, efirlarni tomosha qiling</p>
+      </div>
+      <div class="modal-body">
+        <input class="m-inp" type="email" id="loginEmail" placeholder="Email manzil">
+        <input class="m-inp" type="password" placeholder="Parol">
+        <button class="m-btn" onclick="fakeLogin()">Kirish →</button>
+        <div class="m-or">yoki</div>
+        <button class="m-google" onclick="fakeLogin()">
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Google bilan kirish
+        </button>
+      </div>
+      <div class="m-footer">Akkaunt yo'qmi? <a onclick="switchForm('register')">Ro'yxatdan o'tish</a></div>
+    </div>
+    <!-- REGISTER -->
+    <div id="formRegister" style="display:none">
+      <div class="modal-top">
+        <h2>Akkaunt yaratish 🔴</h2>
+        <p>Bepul ro'yxatdan o'ting — 30 soniyada tayyor</p>
+      </div>
+      <div class="modal-body">
+        <input class="m-inp" type="text" id="regName" placeholder="To'liq ism">
+        <input class="m-inp" type="text" id="regUser" placeholder="@username">
+        <input class="m-inp" type="email" placeholder="Email">
+        <input class="m-inp" type="password" placeholder="Parol (min 8 belgi)">
+        <button class="m-btn" onclick="fakeRegister()">Akkaunt yaratish →</button>
+        <div class="m-or">yoki</div>
+        <button class="m-google" onclick="fakeRegister()">
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Google bilan ro'yxatdan o'tish
+        </button>
+      </div>
+      <div class="m-footer">Allaqachon bor? <a onclick="switchForm('login')">Kirish</a></div>
     </div>
   </div>
 </div>
-
-<footer>
-  <div class="footer-logo">Buzz<span>Live</span></div>
-  <div class="footer-links">
-    <a href="#">Haqida</a>
-    <a href="#">Xavfsizlik</a>
-    <a href="#">Shartlar</a>
-    <a href="https://t.me/ZeroRisk0" target="_blank">Aloqa</a>
-  </div>
-  <div class="footer-copy">© 2026 BuzzLive</div>
-</footer>
 
 <script>
-function goPage(tabEl, id) {
-  document.querySelectorAll('.h-tab').forEach(t => t.classList.remove('active'));
-  if(tabEl) tabEl.classList.add('active');
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
+let isLoggedIn = false;
+let liveStream = null;
+
+// Page navigation
+function goTo(id, tabEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.getElementById('page-' + id).classList.add('on');
+  if(tabEl) {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('on'));
+    tabEl.classList.add('on');
+  }
   window.scrollTo(0,0);
 }
-function showModal(t) {
-  document.getElementById('modal').classList.add('show');
-  document.getElementById('modal-login').style.display = t==='login'?'block':'none';
-  document.getElementById('modal-register').style.display = t==='register'?'block':'none';
+
+// Auth
+function openAuth(t) {
+  document.getElementById('overlay').classList.add('show');
+  switchForm(t);
 }
-function closeModal() { document.getElementById('modal').classList.remove('show'); }
-function switchModal(t) {
-  document.getElementById('modal-login').style.display = t==='login'?'block':'none';
-  document.getElementById('modal-register').style.display = t==='register'?'block':'none';
+function closeOverlay() { document.getElementById('overlay').classList.remove('show'); }
+function switchForm(t) {
+  document.getElementById('formLogin').style.display = t==='login' ? 'block' : 'none';
+  document.getElementById('formRegister').style.display = t==='register' ? 'block' : 'none';
 }
-async function requestCamera() {
+
+function fakeLogin() {
+  isLoggedIn = true;
+  closeOverlay();
+  showProfile('Foydalanuvchi','@user');
+}
+function fakeRegister() {
+  const name = document.getElementById('regName').value || 'Foydalanuvchi';
+  const user = document.getElementById('regUser').value || 'user';
+  isLoggedIn = true;
+  closeOverlay();
+  showProfile(name, user.startsWith('@') ? user : '@'+user);
+  goTo('profile', document.querySelectorAll('.nav-tab')[2]);
+}
+function showProfile(name, handle) {
+  document.getElementById('authWall').style.display = 'none';
+  document.getElementById('loggedInProfile').style.display = 'block';
+  document.getElementById('profileName').textContent = name;
+  document.getElementById('profileHandle').textContent = handle;
+  document.querySelector('.nav-btn-ghost').textContent = name.split(' ')[0];
+}
+
+// Camera
+async function startCam() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({video:true,audio:true});
-    const video = document.getElementById('cameraFeed');
-    video.srcObject = stream;
-    video.style.display = 'block';
-    document.querySelector('.camera-off').style.display = 'none';
+    const v = document.getElementById('feed');
+    v.srcObject = stream;
+    v.style.display = 'block';
+    liveStream = stream;
+    document.getElementById('camOff').style.display = 'none';
+    document.getElementById('camOn').style.display = 'flex';
   } catch(e) {
-    alert('Kamera ruxsati berilmadi: ' + e.message);
+    alert('Kamera ruxsati berilmadi. ' + e.message);
   }
 }
-function startLive() {
-  const title = document.getElementById('liveTitle').value.trim();
-  const cat = document.getElementById('liveCategory').value;
-  if(!title) { alert('Efir sarlavhasini kiriting'); return; }
-  if(!cat) { alert('Kategoriya tanlang'); return; }
-  showModal('register');
+
+// Privacy option
+function pickPriv(el) {
+  document.querySelectorAll('.priv-opt').forEach(o => o.classList.remove('on'));
+  el.classList.add('on');
 }
+
+// Go live
+function tryGoLive() {
+  if(!isLoggedIn) { openAuth('register'); return; }
+  const t = document.getElementById('lTitle').value.trim();
+  const c = document.getElementById('lCat').value;
+  if(!t) { document.getElementById('lTitle').focus(); return; }
+  openLiveRoom(t);
+}
+
+function openLiveRoom(title) {
+  document.getElementById('lrTitle').textContent = title || 'Mening efir';
+  document.getElementById('liveRoom').classList.add('show');
+  // Pass camera stream if available
+  if(liveStream) {
+    const lv = document.getElementById('liveVid');
+    lv.srcObject = liveStream;
+    lv.style.display = 'block';
+    document.getElementById('lrPlaceholder').style.display = 'none';
+  }
+  startViewerCount();
+}
+
+function closeLiveRoom() {
+  document.getElementById('liveRoom').classList.remove('show');
+  if(liveStream) { liveStream.getTracks().forEach(t => t.stop()); liveStream = null; }
+  const feed = document.getElementById('feed');
+  feed.srcObject = null; feed.style.display = 'none';
+  document.getElementById('camOff').style.display = 'flex';
+}
+
+// Viewer counter animation
+function startViewerCount() {
+  let v = 0;
+  const el = document.getElementById('lrViewers');
+  const iv = setInterval(() => {
+    v += Math.floor(Math.random() * 3);
+    el.textContent = v;
+  }, 3000);
+  document.getElementById('liveRoom').dataset.iv = iv;
+}
+
+// Chat
+function sendMsg() {
+  const inp = document.getElementById('lrChatInp');
+  const text = inp.value.trim();
+  if(!text) return;
+  addChatMsg('Siz', text, '#9d97ff');
+  inp.value = '';
+}
+function addChatMsg(name, text, color) {
+  const msgs = document.getElementById('lrMsgs');
+  const d = document.createElement('div');
+  d.className = 'chat-msg';
+  d.innerHTML = `<span class="cn" style="color:${color}">${name}:</span><span class="ct">${text}</span>`;
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// Categories
 document.querySelectorAll('.cat').forEach(c => {
-  c.onclick = () => { document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active')); c.classList.add('active'); };
+  c.onclick = () => { document.querySelectorAll('.cat').forEach(x=>x.classList.remove('on')); c.classList.add('on'); };
 });
+
+// Profile tabs
+document.querySelectorAll('.p-tab').forEach(t => {
+  t.onclick = () => { document.querySelectorAll('.p-tab').forEach(x=>x.classList.remove('on')); t.classList.add('on'); };
+});
+
+// Close overlay on bg click
+document.getElementById('overlay').onclick = e => { if(e.target===e.currentTarget) closeOverlay(); };
 </script>
 </body>
 </html>
